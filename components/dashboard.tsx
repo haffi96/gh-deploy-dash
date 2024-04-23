@@ -27,7 +27,7 @@ export function Dashboard() {
             <DashboardSummary />
             <DashboardTabs />
           </div>
-          <div>
+          {/* <div>
             <Card className="overflow-hidden" x-chunk="dashboard-05-chunk-4">
               <CardHeader className="flex flex-row items-start bg-muted/50">
                 <div className="grid gap-0.5">
@@ -178,7 +178,7 @@ export function Dashboard() {
                 </Pagination>
               </CardFooter>
             </Card>
-          </div>
+          </div> */}
         </main>
       </div>
     </div>
