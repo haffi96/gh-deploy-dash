@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button'
 import { TabContent } from './tabContent'
 
 
-
-
 export default function DashboardTabs() {
   return (
     <Tabs defaultValue="week">

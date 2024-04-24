@@ -1,26 +1,19 @@
 'use client'
 
 import React from 'react'
-import { RepoDeploy } from './tabContent'
 import { TableRow, TableCell, TableBody } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink } from 'lucide-react'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '../ui/collapsible'
-
-
-
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import { RefWorkflowChecks } from './workflowChecks'
+import { RepoDeploy } from '@/lib/schemas/GithubApi'
+import { ConclusionBadge } from '@/components/conclusionBadge'
 
 interface DeployRowProps {
   deployData: RepoDeploy[];
 }
 
-export function TableDeployRow(props: DeployRowProps) {
+export function TableDeployBody(props: DeployRowProps) {
   const { deployData } = props;
   return (
     <TableBody>
@@ -42,25 +35,20 @@ export function TableDeployRow(props: DeployRowProps) {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden sm:table-cell">
-                    <Badge className="text-xs bg-green-400" variant="secondary">
-                      {parsedDeployment.workflow_run.conclusion}
-                    </Badge>
+                    <ConclusionBadge conclusion={parsedDeployment.workflow_run.conclusion} />
                   </TableCell>
                   <TableCell className="hidden md:table-cell">{parsedDeployment.workflow_run.created_at.toLocaleString('en-GB')}</TableCell>
-                  <TableCell className="">
+                  <TableCell className='hover:bg-zinc-400'>
                     <a href={parsedDeployment.workflow_run.html_url}>
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4 hover:zinc-600" />
                     </a>
                   </TableCell>
                 </TableRow>
               </CollapsibleTrigger>
-              <CollapsibleContent asChild>
-                <TableRow key={index}>
-                  <TableCell className="font-medium">----</TableCell>
-                  <TableCell>----</TableCell>
-                  <TableCell>----</TableCell>
-                  <TableCell className="text-right">----</TableCell>
-                </TableRow>
+              <CollapsibleContent className='' asChild>
+                <TableCell colSpan={6}>
+                  <RefWorkflowChecks head_sha={parsedDeployment.head_sha} />
+                </TableCell>
               </CollapsibleContent>
             </>
           </Collapsible>
