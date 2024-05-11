@@ -3,8 +3,10 @@ import {
     RepoDeploymentsSchema,
     RepoListSchema,
 } from "@/lib/schemas/GithubApi";
+import { getAccessToken } from "./auth.server";
 
 const GITHUB_BOTS_TO_SKIP = ["github-advanced-security[bot]", "Bot"];
+const DEFAULT_API_VERSION = "2022-11-28";
 
 export async function getDeploymentsForRepo({
     owner,
@@ -13,12 +15,13 @@ export async function getDeploymentsForRepo({
     owner: string;
     repoName: string;
 }) {
+    const access_token = await getAccessToken();
     const response = await fetch(
-        `https://api.github.com/repos/${owner}/${repoName}/deployments?per_page=5`,
+        `https://api.github.com/repos/${owner}/${repoName}/deployments?per_page=10`,
         {
             headers: {
-                "X-GitHub-Api-Version": "2022-11-28",
-                Authorization: `Bearer ${process.env.GH_SECRET}`,
+                "X-GitHub-Api-Version": DEFAULT_API_VERSION,
+                Authorization: `Bearer ${access_token}`,
             },
         },
     );
@@ -44,12 +47,13 @@ export async function getWorkflowForRef(
     owner: string,
     repoName: string,
 ) {
+    const access_token = await getAccessToken();
     const response = await fetch(
         `https://api.github.com/repos/${owner}/${repoName}/actions/runs?head_sha=${ref}&event=push`,
         {
             headers: {
-                "X-GitHub-Api-Version": "2022-11-28",
-                Authorization: `Bearer ${process.env.GH_SECRET}`,
+                "X-GitHub-Api-Version": DEFAULT_API_VERSION,
+                Authorization: `Bearer ${access_token}`,
             },
         },
     );
@@ -62,12 +66,13 @@ export async function getWorkflowChecksForRef(
     owner: string,
     repoName: string,
 ) {
+    const access_token = await getAccessToken();
     const response = await fetch(
         `https://api.github.com/repos/${owner}/${repoName}/commits/${head_sha}/check-runs`,
         {
             headers: {
-                "X-GitHub-Api-Version": "2022-11-28",
-                Authorization: `Bearer ${process.env.GH_SECRET}`,
+                "X-GitHub-Api-Version": DEFAULT_API_VERSION,
+                Authorization: `Bearer ${access_token}`,
             },
         },
     );
@@ -75,18 +80,18 @@ export async function getWorkflowChecksForRef(
     return checks;
 }
 
-export async function listReposForUser(owner: string) {
+export async function listReposForUser() {
+    const access_token = await getAccessToken();
     const response = await fetch(
-        `https://api.github.com/users/${owner}/repos?sort=pushed&per_page=30`,
+        `https://api.github.com/user/repos?sort=pushed&per_page=30`,
         {
             headers: {
-                "X-GitHub-Api-Version": "2022-11-28",
-                Authorization: `Bearer ${process.env.GH_SECRET}`,
+                "X-GitHub-Api-Version": DEFAULT_API_VERSION,
+                Authorization: `Bearer ${access_token}`,
             },
         },
     );
     const repos = await response.json();
-
     return RepoListSchema.parse(repos);
 }
 

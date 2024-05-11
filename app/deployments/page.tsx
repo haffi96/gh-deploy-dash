@@ -1,6 +1,6 @@
 import { DeploymentsDashboard } from "@/components/dashboard";
 
-export default function Home() {
+export default async function Home() {
     return (
         <main className="">
             <DeploymentsDashboard />
