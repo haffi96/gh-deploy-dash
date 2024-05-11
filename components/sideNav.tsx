@@ -16,6 +16,7 @@ import {
     Rocket,
 } from "lucide-react";
 import { headers } from "next/headers";
+import { UserButton } from "@clerk/nextjs";
 
 export function SideNav() {
     const pageHeaders = headers();
@@ -112,6 +113,7 @@ export function SideNav() {
                         <TooltipContent side="right">Settings</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
+                <UserButton />
             </nav>
         </aside>
     );

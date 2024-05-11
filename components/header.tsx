@@ -7,19 +7,9 @@ import {
     BreadcrumbList,
     Breadcrumb,
 } from "@/components/ui/breadcrumb";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import {
-    DropdownMenuTrigger,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuItem,
-    DropdownMenuContent,
-    DropdownMenu,
-} from "@/components/ui/dropdown-menu";
-import { SearchIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { SearchIcon, User } from "lucide-react";
 
 export function Header() {
     return (
@@ -52,35 +42,6 @@ export function Header() {
                         type="search"
                     />
                 </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button
-                            className="overflow-hidden rounded-full"
-                            size="icon"
-                            variant="outline"
-                        >
-                            <Image
-                                alt="Avatar"
-                                className="overflow-hidden rounded-full"
-                                height={36}
-                                src="/placeholder.svg"
-                                style={{
-                                    aspectRatio: "36/36",
-                                    objectFit: "cover",
-                                }}
-                                width={36}
-                            />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </header>
         </div>
     );
