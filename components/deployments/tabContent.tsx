@@ -33,6 +33,7 @@ export function TabContent() {
 
             for await (let value of response) {
                 try {
+                    console.log(value);
                     const chunk = JSON.parse(value);
                     console.log(chunk);
                     setDeploymentsWorkflows((prev) => [...prev, chunk]);
