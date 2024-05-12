@@ -6,6 +6,7 @@ import {
 import { makeStream, StreamingResponse } from "@/lib/stream";
 
 export const runtime = 'nodejs';
+export const maxDuration = 30;
 // This is required to enable streaming
 export const dynamic = "force-dynamic";
 

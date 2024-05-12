@@ -3,12 +3,19 @@ export const makeStream = <T extends Record<string, unknown>>(
 ) => {
     const encoder = new TextEncoder();
     return new ReadableStream<any>({
-        async start(controller) {
-            for await (let chunk of generator) {
-                const chunkData = encoder.encode(JSON.stringify(chunk));
+        // The pull method controls what happens
+        // when data is added to a stream.
+        async pull(controller) {
+            const { value, done } = await generator.next();
+            // done == true when the generator will yield
+            // no more new values. If that's the case,
+            // close the stream.
+            if (done) {
+                controller.close();
+            } else {
+                const chunkData = encoder.encode(JSON.stringify(value));
                 controller.enqueue(chunkData);
             }
-            controller.close();
         },
     });
 };
@@ -19,6 +26,7 @@ export class StreamingResponse extends Response {
             ...init,
             status: 200,
             headers: {
+                'Content-Type': 'text/html; charset=utf-8',
                 ...init?.headers,
             },
         });
