@@ -10,10 +10,10 @@ import {
     CardContent,
 } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
-import { TableDeployBody } from "./tableDeployBody";
+import { TableDeployBody } from "@/components/deployments/tableDeployBody";
 import { GetUserSelectedRepos } from "@/lib/storage/local";
 import { DeploymentWorkflow } from "@/lib/schemas/GithubApi";
-import { streamingFetch } from "@/lib/stream/fetch";
+import { streamingFetchDeployments } from "@/lib/stream/fetch";
 
 export function TabContent() {
     const [deploymentsWorkflows, setDeploymentsWorkflows] = useState<
@@ -23,7 +23,7 @@ export function TabContent() {
     useEffect(() => {
         const selectedRepoList = GetUserSelectedRepos();
         const fetchData = async () => {
-            const response = streamingFetch("/api/deployments", {
+            const response = streamingFetchDeployments("/api/deployments", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,9 +33,8 @@ export function TabContent() {
 
             for await (let chunk of response) {
                 try {
-                    console.log(chunk);
                     // chunk is an array of DeploymentWorkflow objects
-                    setDeploymentsWorkflows((prev) => [...prev, ...chunk!]);
+                    setDeploymentsWorkflows((prev) => [...prev, ...chunk]);
                 } catch (e: any) {
                     console.warn(e.message);
                 }

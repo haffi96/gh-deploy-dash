@@ -1,4 +1,4 @@
-import { DeploymentWorkflow } from "../schemas/GithubApi";
+import { DeploymentWorkflow } from "@/lib/schemas/GithubApi";
 
 export const makeStream = (
     generator: AsyncGenerator<DeploymentWorkflow[], void, unknown>,
