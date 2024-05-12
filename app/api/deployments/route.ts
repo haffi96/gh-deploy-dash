@@ -5,6 +5,7 @@ import {
 } from "@/lib/services/GithubApi";
 import { makeStream, StreamingResponse } from "@/lib/stream";
 
+export const runtime = 'nodejs';
 // This is required to enable streaming
 export const dynamic = "force-dynamic";
 
