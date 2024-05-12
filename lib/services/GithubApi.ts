@@ -1,5 +1,7 @@
 import {
-    RepoDeploy,
+    DeploymentWorkflow,
+    DeploymentWorkflowSchema,
+    RepoDeployments,
     RepoDeploymentsSchema,
     RepoListSchema,
 } from "@/lib/schemas/GithubApi";
@@ -25,7 +27,8 @@ export async function getDeploymentsForRepo({
             },
         },
     );
-    return await response.json();
+    const respJson = await response.json();
+    return RepoDeploymentsSchema.parse(respJson);
 }
 
 export async function listDeployments(repos: string[]) {
@@ -39,6 +42,13 @@ export async function listDeployments(repos: string[]) {
         });
         allDeployments.push(...repoDeployments);
     }
+
+    allDeployments.sort((a, b) => {
+        return (
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+    });
+
     return allDeployments;
 }
 
@@ -95,17 +105,15 @@ export async function listReposForUser() {
     return RepoListSchema.parse(repos);
 }
 
-export async function getDeploymentsWorkflows(repos: string[]) {
-    const deployments = await listDeployments(repos);
-    const repoDeployments = new Map<number, RepoDeploy>();
 
+export async function *fetchWorkflowsGenerator(deployments: RepoDeployments): AsyncGenerator<DeploymentWorkflow, void, unknown> {
     for (const deployment of deployments) {
         if (GITHUB_BOTS_TO_SKIP.includes(deployment.creator.type)) {
             continue;
         }
 
         const { sha, environment, repository_url, creator } = deployment;
-        const repoName = repository_url.split("/").slice(-1);
+        const repoName = repository_url.split("/").slice(-1)[0];
         const workflow = await getWorkflowForRef(
             deployment.sha,
             creator.login,
@@ -119,7 +127,7 @@ export async function getDeploymentsWorkflows(repos: string[]) {
         }
 
         const parsedDate = new Date(workflow.created_at);
-        const repoDeployment = RepoDeploymentsSchema.parse({
+        const deploymentWorkflow = DeploymentWorkflowSchema.parse({
             head_sha: sha,
             environment,
             workflow_run: {
@@ -150,16 +158,6 @@ export async function getDeploymentsWorkflows(repos: string[]) {
                 },
             },
         });
-
-        repoDeployments.set(deployment.id, repoDeployment);
+        yield deploymentWorkflow;
     }
-
-    const mappedArray = Array.from(repoDeployments.values());
-    mappedArray.sort((a, b) => {
-        return (
-            new Date(b.workflow_run.created_at).getTime() -
-            new Date(a.workflow_run.created_at).getTime()
-        );
-    });
-    return mappedArray;
 }

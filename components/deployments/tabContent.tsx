@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     TableHead,
     TableRow,
     TableHeader,
     Table,
-    TableBody,
 } from "@/components/ui/table";
 import {
     CardTitle,
@@ -17,28 +16,37 @@ import {
 } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import { TableDeployBody } from "./tableDeployBody";
-import { getDeploymentsWorkflows } from "@/lib/services/GithubApi";
 import { GetUserSelectedRepos } from "@/lib/storage/local";
-import { RepoDeploy } from "@/lib/schemas/GithubApi";
+import { DeploymentWorkflow } from "@/lib/schemas/GithubApi";
+import { streamingFetch } from "@/lib/stream/fetch";
 
 export function TabContent() {
     const [deploymentsWorkflows, setDeploymentsWorkflows] = useState<
-        RepoDeploy[]
+        DeploymentWorkflow[]
     >([]);
 
     useEffect(() => {
         const selectedRepoList = GetUserSelectedRepos();
-        fetch("/api/deployments", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ repos: selectedRepoList }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setDeploymentsWorkflows(data.workflows);
+        const fetchData = async () => {
+            const response = streamingFetch("/api/deployments", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ repos: selectedRepoList }),
             });
+
+            for await ( let value of response ) {
+                try {
+                const chunk = JSON.parse(value);
+                setDeploymentsWorkflows( (prev) => [...prev, chunk]);
+                }
+                catch( e:any ) {
+                console.warn( e.message )
+                }
+            }
+        };
+        fetchData();
     }, []);
 
     return (

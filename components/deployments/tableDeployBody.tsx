@@ -9,11 +9,11 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { RefWorkflowChecks } from "./workflowChecks";
-import { RepoDeploy } from "@/lib/schemas/GithubApi";
+import { DeploymentWorkflow } from "@/lib/schemas/GithubApi";
 import { ConclusionBadge } from "@/components/conclusionBadge";
 
 interface DeployRowProps {
-    deployData: RepoDeploy[];
+    deployData: DeploymentWorkflow[];
 }
 
 export function TableDeployBody(props: DeployRowProps) {

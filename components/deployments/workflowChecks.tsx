@@ -11,9 +11,9 @@ import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { WorkflowChecks, WorkflowChecksSchema } from "@/lib/schemas/GithubApi";
 import { ConclusionBadge } from "@/components/conclusionBadge";
-import { RepoDeploy } from "@/lib/schemas/GithubApi";
+import { DeploymentWorkflow } from "@/lib/schemas/GithubApi";
 
-export function RefWorkflowChecks({ deployment }: { deployment: RepoDeploy }) {
+export function RefWorkflowChecks({ deployment }: { deployment: DeploymentWorkflow }) {
     const [loadedChecks, setLoadedChecks] = useState<WorkflowChecks>();
 
     useEffect(() => {
