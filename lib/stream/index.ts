@@ -1,5 +1,7 @@
-export const makeStream = <T extends Record<string, unknown>>(
-    generator: AsyncGenerator<T, void, unknown>,
+import { DeploymentWorkflow } from "../schemas/GithubApi";
+
+export const makeStream = (
+    generator: AsyncGenerator<DeploymentWorkflow[], void, unknown>,
 ) => {
     const encoder = new TextEncoder();
     return new ReadableStream<any>({
@@ -13,8 +15,8 @@ export const makeStream = <T extends Record<string, unknown>>(
             if (done) {
                 controller.close();
             } else {
-                const chunkData = encoder.encode(JSON.stringify(value));
-                controller.enqueue(chunkData);
+                const markedData = encoder.encode(JSON.stringify(value));
+                controller.enqueue(markedData);
             }
         },
     });

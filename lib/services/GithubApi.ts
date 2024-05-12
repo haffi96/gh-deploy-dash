@@ -105,9 +105,14 @@ export async function listReposForUser() {
     return RepoListSchema.parse(repos);
 }
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function* fetchWorkflowsGenerator(
     deployments: RepoDeployments,
-): AsyncGenerator<DeploymentWorkflow, void, unknown> {
+): AsyncGenerator<DeploymentWorkflow[], void, unknown> {
+    let deploymentWorkflows = [];
     for (const deployment of deployments) {
         if (GITHUB_BOTS_TO_SKIP.includes(deployment.creator.type)) {
             continue;
@@ -159,6 +164,7 @@ export async function* fetchWorkflowsGenerator(
                 },
             },
         });
-        yield deploymentWorkflow;
+        deploymentWorkflows.push(deploymentWorkflow);
+        yield deploymentWorkflows;
     }
 }
