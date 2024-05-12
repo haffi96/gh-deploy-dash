@@ -4,7 +4,7 @@ export const makeStream = (
     generator: AsyncGenerator<DeploymentWorkflow[], void, unknown>,
 ) => {
     const encoder = new TextEncoder();
-    return new ReadableStream<any>({
+    return new ReadableStream<any>({ 
         // The pull method controls what happens
         // when data is added to a stream.
         async pull(controller) {
@@ -15,7 +15,7 @@ export const makeStream = (
             if (done) {
                 controller.close();
             } else {
-                const markedData = encoder.encode(JSON.stringify(value));
+                const markedData = encoder.encode(JSON.stringify(value) + "\n");
                 controller.enqueue(markedData);
             }
         },

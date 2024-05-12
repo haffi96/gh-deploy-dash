@@ -31,12 +31,10 @@ export function TabContent() {
                 body: JSON.stringify({ repos: selectedRepoList }),
             });
             
-            for await (let value of response) {
+            for await (let chunk of response) {
                 try {
-                    console.log(value);
-                    const chunk = JSON.parse(value);
+                    console.log(chunk);
                     // chunk is an array of DeploymentWorkflow objects
-                    // Add the chunk to the state
                     setDeploymentsWorkflows((prev) => [...prev, ...chunk]);
                 } catch (e: any) {
                     console.warn(e.message);
