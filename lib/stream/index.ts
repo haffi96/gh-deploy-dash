@@ -4,7 +4,7 @@ export const makeStream = (
     generator: AsyncGenerator<DeploymentWorkflow[], void, unknown>,
 ) => {
     const encoder = new TextEncoder();
-    return new ReadableStream<any>({ 
+    return new ReadableStream<any>({
         // The pull method controls what happens
         // when data is added to a stream.
         async pull(controller) {
@@ -28,7 +28,7 @@ export class StreamingResponse extends Response {
             ...init,
             status: 200,
             headers: {
-                'Content-Type': 'text/html; charset=utf-8',
+                "Content-Type": "text/html; charset=utf-8",
                 ...init?.headers,
             },
         });

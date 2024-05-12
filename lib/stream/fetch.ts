@@ -4,8 +4,8 @@ export async function* streamingFetch(
 ) {
     const response = await fetch(input, init);
     if (!response.ok || !response.body) {
-          throw response.statusText;
-        }
+        throw response.statusText;
+    }
     const reader = response.body!.getReader();
     const decoder = new TextDecoder("utf-8");
 
@@ -30,22 +30,22 @@ export async function* streamingFetch(
 
         const boundary = buffer.lastIndexOf(`\n`);
         if (boundary !== -1) {
-        const completeData = buffer.substring(0, boundary);
-        buffer = buffer.substring(boundary + 1);
+            const completeData = buffer.substring(0, boundary);
+            buffer = buffer.substring(boundary + 1);
 
-        let jsonObj;
+            let jsonObj;
 
-        completeData.split(`\n`).forEach(chunk => {
-            if (chunk) {
-            try {
-                jsonObj = JSON.parse(chunk);
-                // Yay! Do what you want with your JSON here!
-            } catch (e) {
-                console.error(`Error parsing JSON:`, e);
-            }
-            }
-        });
-        yield jsonObj;
+            completeData.split(`\n`).forEach((chunk) => {
+                if (chunk) {
+                    try {
+                        jsonObj = JSON.parse(chunk);
+                        // Yay! Do what you want with your JSON here!
+                    } catch (e) {
+                        console.error(`Error parsing JSON:`, e);
+                    }
+                }
+            });
+            yield jsonObj;
         }
-}
+    }
 }
