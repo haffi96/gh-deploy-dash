@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import {
-    TableHead,
-    TableRow,
-    TableHeader,
-    Table,
-} from "@/components/ui/table";
+import { TableHead, TableRow, TableHeader, Table } from "@/components/ui/table";
 import {
     CardTitle,
     CardDescription,
@@ -36,13 +31,13 @@ export function TabContent() {
                 body: JSON.stringify({ repos: selectedRepoList }),
             });
 
-            for await ( let value of response ) {
+            for await (let value of response) {
                 try {
-                const chunk = JSON.parse(value);
-                setDeploymentsWorkflows( (prev) => [...prev, chunk]);
-                }
-                catch( e:any ) {
-                console.warn( e.message )
+                    const chunk = JSON.parse(value);
+                    console.log(chunk);
+                    setDeploymentsWorkflows((prev) => [...prev, chunk]);
+                } catch (e: any) {
+                    console.warn(e.message);
                 }
             }
         };

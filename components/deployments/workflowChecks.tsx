@@ -13,7 +13,11 @@ import { WorkflowChecks, WorkflowChecksSchema } from "@/lib/schemas/GithubApi";
 import { ConclusionBadge } from "@/components/conclusionBadge";
 import { DeploymentWorkflow } from "@/lib/schemas/GithubApi";
 
-export function RefWorkflowChecks({ deployment }: { deployment: DeploymentWorkflow }) {
+export function RefWorkflowChecks({
+    deployment,
+}: {
+    deployment: DeploymentWorkflow;
+}) {
     const [loadedChecks, setLoadedChecks] = useState<WorkflowChecks>();
 
     useEffect(() => {

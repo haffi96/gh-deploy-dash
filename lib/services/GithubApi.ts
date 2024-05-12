@@ -105,8 +105,9 @@ export async function listReposForUser() {
     return RepoListSchema.parse(repos);
 }
 
-
-export async function *fetchWorkflowsGenerator(deployments: RepoDeployments): AsyncGenerator<DeploymentWorkflow, void, unknown> {
+export async function* fetchWorkflowsGenerator(
+    deployments: RepoDeployments,
+): AsyncGenerator<DeploymentWorkflow, void, unknown> {
     for (const deployment of deployments) {
         if (GITHUB_BOTS_TO_SKIP.includes(deployment.creator.type)) {
             continue;

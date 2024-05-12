@@ -58,37 +58,20 @@ export const RepoListSchema = z.array(
     }),
 );
 
-
-export const RepoDeploymentsSchema = z.array(z.object({
-    url: z.string(),
-    id: z.number(),
-    node_id: z.string(),
-    task: z.string(),
-    original_environment: z.string(),
-    environment: z.string(),
-    description: z.string().nullable(),
-    created_at: z.string(),
-    updated_at: z.string(),
-    statuses_url: z.string(),
-    repository_url: z.string(),
-    creator: z.object({
-        login: z.string(),
-        id: z.number(),
-        avatar_url: z.string(),
+export const RepoDeploymentsSchema = z.array(
+    z.object({
         url: z.string(),
-        type: z.string(),
-        site_admin: z.boolean(),
-    }),
-    sha: z.string(),
-    ref: z.string(),
-    payload: z.object({}),
-    transient_environment: z.boolean(),
-    production_environment: z.boolean(),
-    performed_via_github_app: z.object({
         id: z.number(),
-        slug: z.string(),
         node_id: z.string(),
-        owner: z.object({
+        task: z.string(),
+        original_environment: z.string(),
+        environment: z.string(),
+        description: z.string().nullable(),
+        created_at: z.string(),
+        updated_at: z.string(),
+        statuses_url: z.string(),
+        repository_url: z.string(),
+        creator: z.object({
             login: z.string(),
             id: z.number(),
             avatar_url: z.string(),
@@ -96,12 +79,32 @@ export const RepoDeploymentsSchema = z.array(z.object({
             type: z.string(),
             site_admin: z.boolean(),
         }),
-        name: z.string(),
-        description: z.string(),
-        external_url: z.string(),
-        html_url: z.string(),
-        created_at: z.string(),
-        updated_at: z.string(),
-        events: z.array(z.string()),
-    }).nullable(),
-}));
+        sha: z.string(),
+        ref: z.string(),
+        payload: z.object({}),
+        transient_environment: z.boolean(),
+        production_environment: z.boolean(),
+        performed_via_github_app: z
+            .object({
+                id: z.number(),
+                slug: z.string(),
+                node_id: z.string(),
+                owner: z.object({
+                    login: z.string(),
+                    id: z.number(),
+                    avatar_url: z.string(),
+                    url: z.string(),
+                    type: z.string(),
+                    site_admin: z.boolean(),
+                }),
+                name: z.string(),
+                description: z.string(),
+                external_url: z.string(),
+                html_url: z.string(),
+                created_at: z.string(),
+                updated_at: z.string(),
+                events: z.array(z.string()),
+            })
+            .nullable(),
+    }),
+);
